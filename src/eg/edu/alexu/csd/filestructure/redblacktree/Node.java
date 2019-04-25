@@ -43,9 +43,7 @@ public class Node<T extends Comparable<T>, V> implements INode<T, V> {
 
 	@Override
 	public INode<T, V> getRightChild() {
-		if (right == null) {
-			return null;
-		}
+		
 		return right;
 	}
 

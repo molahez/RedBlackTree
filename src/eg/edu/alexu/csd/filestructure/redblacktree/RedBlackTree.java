@@ -250,18 +250,24 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			y = (Node<T, V>) treemin((Node<T, V>) z.getRightChild());
 			y_original = y.getColor();
 			x = (Node<T, V>) y.getRightChild();
-			if (y.getParent() == z) {
+			if (x != null && y.getParent() == z) {
+
 				x.setParent(z);
 
 			} else {
 				transplant(y, (Node<T, V>) y.getRightChild());
 				y.setRightChild(z.getRightChild());
-				y.getRightChild().setParent(y);
+				if (y.getRightChild() != null) {
+					y.getRightChild().setParent(y);
+				}
 
 			}
 			transplant(z, y);
 			y.setLeftChild(z.getLeftChild());
-			y.getLeftChild().setParent(y);
+			if (y.getLeftChild() != null) {
+				y.getLeftChild().setParent(y);
+			}
+
 			y.setColor(z.getColor());
 		}
 		if (y_original == Node.BLACK) {
@@ -280,8 +286,13 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 		} else {
 			target.getParent().setRightChild(targwith);
+		}
+		if (targwith == null) {
+
+		} else {
 			targwith.setParent(target.getParent());
 		}
+
 	}
 
 	private INode<T, V> treemin(Node<T, V> subtree) {
@@ -293,7 +304,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	}
 
 	private void deleteFixup(Node<T, V> x) {
-		while (x != root && x.getColor() == Node.BLACK) {
+		while (x != null && x != root && x.getColor() == Node.BLACK) {
 			if (x == x.getParent().getLeftChild()) {
 				Node<T, V> w = (Node<T, V>) x.getParent().getRightChild();
 
@@ -356,7 +367,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			}
 
 		}
-		x.setColor(Node.BLACK);
+		if (x != null) {
+			x.setColor(Node.BLACK);
+		}
 
 	}
 
