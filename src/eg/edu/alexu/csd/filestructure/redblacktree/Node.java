@@ -1,8 +1,8 @@
 package eg.edu.alexu.csd.filestructure.redblacktree;
 
 public class Node<T extends Comparable<T>, V> implements INode<T, V> {
-	private T key;
-	private V val;
+	private T key = null;
+	private V val = null;
 	private Node<T, V> left, right;
 	private Node<T, V> parent;
 	private Boolean color;

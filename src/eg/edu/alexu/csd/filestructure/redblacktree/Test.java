@@ -1,6 +1,7 @@
 package eg.edu.alexu.csd.filestructure.redblacktree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import org.junit.Assert;
@@ -8,15 +9,15 @@ import org.junit.Assert;
 public class Test {
 
 	public static void main(String[] args) {
-		RedBlackTree redBlackTree  = new RedBlackTree();
-		Random r = new Random();
-		for (int i = 0; i < 100; ++i) {
-			int key = r.nextInt(1000);
-			redBlackTree.insert(key, "toto" + key);
+		ITreeMap treemap = (ITreeMap) TestRunner.getImplementationInstanceForInterface(ITreeMap.class);
+				for (int i = 0; i < 2; ++i) {
+
+			
+			treemap.put(i, "soso" + i);
 		}
-		System.out.println(redBlackTree.getRoot().getKey());
-		
-		
-		
+
+	
+		System.out.println(treemap.floorKey(0));
+
 	}
 }

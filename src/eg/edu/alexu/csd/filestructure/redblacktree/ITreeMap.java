@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.139.
- */
 package eg.edu.alexu.csd.filestructure.redblacktree;
 
 import java.util.ArrayList;
@@ -9,50 +6,189 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ITreeMap<T extends Comparable<T>, V> {
-    public Map.Entry<T, V> ceilingEntry(T var1);
 
-    public T ceilingKey(T var1);
+	/**
+	 * Returns a key-value mapping associated with the least key greater than or
+	 * equal to the given key, or null if there is no such key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Map.Entry<T, V> ceilingEntry(T key);
 
-    public void clear();
+	/**
+	 * Returns the least key greater than or equal to the given key, or null if
+	 * there is no such key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public T ceilingKey(T key);
 
-    public boolean containsKey(T var1);
+	/**
+	 * Removes all of the mappings from this map.
+	 */
+	public void clear();
 
-    public boolean containsValue(V var1);
+	/**
+	 * Returns true if this map contains a mapping for the specified key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public boolean containsKey(T key);
 
-    public Set<Map.Entry<T, V>> entrySet();
+	/**
+	 * Returns true if this map maps one or more keys to the specified value.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public boolean containsValue(V value);
 
-    public Map.Entry<T, V> firstEntry();
+	/**
+	 * Returns a Set view of the mappings contained in this map in ascending key
+	 * order.
+	 * 
+	 * @return
+	 */
+	public Set<Map.Entry<T, V>> entrySet();
 
-    public T firstKey();
+	/**
+	 * Returns a key-value mapping associated with the least key in this map, or
+	 * null if the map is empty.
+	 * 
+	 * @return
+	 */
+	public Map.Entry<T, V> firstEntry();
 
-    public Map.Entry<T, V> floorEntry(T var1);
+	/**
+	 * Returns the first (lowest) key currently in this map, or null if the map is
+	 * empty.
+	 * 
+	 * @return
+	 */
+	public T firstKey();
 
-    public T floorKey(T var1);
+	/**
+	 * Returns a key-value mapping associated with the greatest key less than or
+	 * equal to the given key, or null if there is no such key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Map.Entry<T, V> floorEntry(T key);
 
-    public V get(T var1);
+	/**
+	 * Returns the greatest key less than or equal to the given key, or null if
+	 * there is no such key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public T floorKey(T key);
 
-    public ArrayList<Map.Entry<T, V>> headMap(T var1);
+	/**
+	 * Returns the value to which the specified key is mapped, or null if this map
+	 * contains no mapping for the key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public V get(T key);
 
-    public ArrayList<Map.Entry<T, V>> headMap(T var1, boolean var2);
+	/**
+	 * Returns a view of the portion of this map whose keys are strictly less than
+	 * toKey in ascending order..
+	 * 
+	 * @param toKey
+	 * @return
+	 */
+	public ArrayList<Map.Entry<T, V>> headMap(T toKey);
 
-    public Set<T> keySet();
+	/**
+	 * Returns a view of the portion of this map whose keys are less than (or equal
+	 * to, if inclusive is true) toKey in ascending order..
+	 * 
+	 * @param toKey
+	 * @param inclusive
+	 * @return
+	 */
+	public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive);
 
-    public Map.Entry<T, V> lastEntry();
+	/**
+	 * Returns a Set view of the keys contained in this map.
+	 * 
+	 * @return
+	 */
+	public Set<T> keySet();
 
-    public T lastKey();
+	/**
+	 * Returns a key-value mapping associated with the greatest key in this map, or
+	 * null if the map is empty.
+	 * 
+	 * @return
+	 */
+	public Map.Entry<T, V> lastEntry();
 
-    public Map.Entry<T, V> pollFirstEntry();
+	/**
+	 * Returns the last (highest) key currently in this map.
+	 * 
+	 * @return
+	 */
+	public T lastKey();
 
-    public Map.Entry<T, V> pollLastEntry();
+	/**
+	 * Removes and returns a key-value mapping associated with the least key in this
+	 * map, or null if the map is empty.
+	 * 
+	 * @return
+	 */
+	public Map.Entry<T, V> pollFirstEntry();
 
-    public void put(T var1, V var2);
+	/**
+	 * Removes and returns a key-value mapping associated with the greatest key in
+	 * this map, or null if the map is empty.
+	 * 
+	 * @return
+	 */
+	public Map.Entry<T, V> pollLastEntry();
 
-    public void putAll(Map<T, V> var1);
+	/**
+	 * Associates the specified value with the specified key in this map.
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void put(T key, V value);
 
-    public boolean remove(T var1);
+	/**
+	 * Copies all of the mappings from the specified map to this map.
+	 * 
+	 * @param map
+	 */
+	public void putAll(Map<T, V> map);
 
-    public int size();
+	/**
+	 * Removes the mapping for this key from this TreeMap if present.
+	 * 
+	 * @param key
+	 * @return true if removed and false otherwise.
+	 */
+	public boolean remove(T key);
 
-    public Collection<V> values();
+	/**
+	 * Returns the number of key-value mappings in this map.
+	 * 
+	 * @return
+	 */
+	public int size();
+
+	/**
+	 * Returns a Collection view of the values contained in this map.
+	 * 
+	 * @return
+	 */
+	public Collection<V> values();
+
 }
-

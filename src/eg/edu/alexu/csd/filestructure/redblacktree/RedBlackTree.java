@@ -1,11 +1,17 @@
 package eg.edu.alexu.csd.filestructure.redblacktree;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.management.RuntimeErrorException;
 
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T, V> {
 
 	private Node<T, V> root = null;
-	private Node<T, V> reqn = null;
+	public Node<T, V> reqn = null;
+	private Map.Entry<T, V> entry;
+	private List<Map.Entry<T, V>> set = new ArrayList<>();
 
 	public INode<T, V> getRoot() {
 		if (root == null) {
@@ -228,54 +234,39 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	@Override
 	public boolean delete(T key) {
-		if (search(key) == null) {
-			return false;
-		}
-		Node<T, V> z = reqn;
-
-		Node<T, V> x;
-		Node<T, V> y = z;
-
-		boolean y_original = y.getColor();
-
-		if (z.getLeftChild() == null) {
-			x = (Node<T, V>) z.getRightChild();
-			transplant(z, (Node<T, V>) z.getRightChild());
-
-		} else if (z.getRightChild() == null) {
-			x = (Node<T, V>) z.getLeftChild();
-			transplant(z, (Node<T, V>) z.getLeftChild());
-
-		} else {
-			y = (Node<T, V>) treemin((Node<T, V>) z.getRightChild());
-			y_original = y.getColor();
-			x = (Node<T, V>) y.getRightChild();
-			if (x != null && y.getParent() == z) {
-
-				x.setParent(z);
-
-			} else {
-				transplant(y, (Node<T, V>) y.getRightChild());
-				y.setRightChild(z.getRightChild());
-				if (y.getRightChild() != null) {
-					y.getRightChild().setParent(y);
-				}
-
-			}
-			transplant(z, y);
-			y.setLeftChild(z.getLeftChild());
-			if (y.getLeftChild() != null) {
-				y.getLeftChild().setParent(y);
-			}
-
-			y.setColor(z.getColor());
-		}
-		if (y_original == Node.BLACK) {
-			deleteFixup(x);
-
-		}
-
-		return true;
+		return false;
+		/*
+		 * if (search(key) == null) { return false; } Node<T, V> z = reqn;
+		 * 
+		 * Node<T, V> x; Node<T, V> y = z;
+		 * 
+		 * boolean y_original = y.getColor();
+		 * 
+		 * if (z.getLeftChild() == null) { x = (Node<T, V>) z.getRightChild();
+		 * transplant(z, (Node<T, V>) z.getRightChild());
+		 * 
+		 * } else if (z.getRightChild() == null) { x = (Node<T, V>) z.getLeftChild();
+		 * transplant(z, (Node<T, V>) z.getLeftChild());
+		 * 
+		 * } else { y = (Node<T, V>) treemin((Node<T, V>) z.getRightChild()); y_original
+		 * = y.getColor(); x = (Node<T, V>) y.getRightChild(); if (x != null &&
+		 * y.getParent() == z) {
+		 * 
+		 * x.setParent(z);
+		 * 
+		 * } else { transplant(y, (Node<T, V>) y.getRightChild());
+		 * y.setRightChild(z.getRightChild()); if (y.getRightChild() != null) {
+		 * y.getRightChild().setParent(y); }
+		 * 
+		 * } transplant(z, y); y.setLeftChild(z.getLeftChild()); if (y.getLeftChild() !=
+		 * null) { y.getLeftChild().setParent(y); }
+		 * 
+		 * y.setColor(z.getColor()); } if (y_original == Node.BLACK) { deleteFixup(x);
+		 * 
+		 * }
+		 * 
+		 * return true;
+		 */
 	}
 
 	private void transplant(Node<T, V> target, Node<T, V> targwith) {
@@ -295,9 +286,17 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	}
 
-	private INode<T, V> treemin(Node<T, V> subtree) {
+	public INode<T, V> treemin(Node<T, V> subtree) {
 		while (subtree.getLeftChild() != null) {
 			subtree = (Node<T, V>) subtree.getLeftChild();
+		}
+		return subtree;
+
+	}
+
+	public INode<T, V> treemax(Node<T, V> subtree) {
+		while (subtree.getRightChild() != null) {
+			subtree = (Node<T, V>) subtree.getRightChild();
 		}
 		return subtree;
 
@@ -373,4 +372,59 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	}
 
+	public INode<T, V> successor(Node<T, V> x) {
+		if (x.getRightChild() != null) {
+			return treemin((Node<T, V>) x.getRightChild());
+		}
+		Node<T, V> P = (Node<T, V>) x.getParent();
+		while (P != null && x == P.getRightChild()) {
+			x = P;
+			P = (Node<T, V>) P.getParent();
+		}
+		return P;
+
+	}
+
+	public INode<T, V> predecessor(Node<T, V> x) {
+
+		if (x.getLeftChild() != null) {
+			return treemax((Node<T, V>) x.getLeftChild());
+		}
+		Node<T, V> P = (Node<T, V>) x.getParent();
+		while (P != null && x == P.getLeftChild()) {
+			x = P;
+			P = (Node<T, V>) P.getParent();
+		}
+		return P;
+
+	}
+
+	public List<Map.Entry<T, V>> inorder(Node<T, V> x) {
+
+		if (x != null) {
+			inorder((Node<T, V>) x.getLeftChild());
+
+			entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
+			set.add(entry);
+			inorder((Node<T, V>) x.getRightChild());
+
+		}
+		return set;
+
+	}
+
+	public Boolean postorder(Node<T, V> x, V val) {
+		if (x != null) {
+
+			postorder((Node<T, V>) x.getLeftChild(), val);
+			postorder((Node<T, V>) x.getRightChild(), val);
+
+			if (x.getValue().toString().equals(val.toString())) {
+				return true;
+			}
+
+		}
+		return false;
+
+	}
 }
