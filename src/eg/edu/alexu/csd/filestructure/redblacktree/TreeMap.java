@@ -53,7 +53,10 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public boolean containsKey(T key) {
-		// TODO Auto-generated method stub
+		if (key == null) {
+			throw new RuntimeErrorException(null);
+
+		}
 		return tree.contains(key);
 
 	}
@@ -69,6 +72,10 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public Set<Map.Entry<T, V>> entrySet() {
+		if (tree.isEmpty()) {
+			throw new RuntimeErrorException(null);
+
+		}
 		List<Map.Entry<T, V>> set = tree.inorder((Node<T, V>) tree.getRoot());
 		Set<Map.Entry<T, V>> sett = new LinkedHashSet<Map.Entry<T, V>>(set);
 
@@ -137,13 +144,16 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public V get(T key) {
-		// TODO Auto-generated method stub
+		if (key == null) {
+			throw new RuntimeErrorException(null);
+
+		}
 		return (V) tree.search(key);
 	}
 
 	@Override
 	public ArrayList<Map.Entry<T, V>> headMap(T toKey) {
-		if(toKey == null) {
+		if (toKey == null) {
 			throw new RuntimeErrorException(null);
 
 		}
@@ -162,13 +172,13 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive) {
-		if(toKey == null) {
+		if (toKey == null) {
 			throw new RuntimeErrorException(null);
 
 		}
 		List<Map.Entry<T, V>> set = tree.inorder((Node<T, V>) tree.getRoot());
 		List<Map.Entry<T, V>> sett = new ArrayList<Map.Entry<T, V>>();
-		
+
 		if (inclusive) {
 			for (int i = 0; i < set.size(); i++) {
 				if (set.get(i).getKey().compareTo(toKey) <= 0) {
@@ -185,7 +195,7 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 			}
 		}
 
-		return  (ArrayList<Entry<T, V>>) sett;
+		return (ArrayList<Entry<T, V>>) sett;
 	}
 
 	@Override
@@ -245,6 +255,10 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public void put(T key, V value) {
+		if (key == null || value == null) {
+			throw new RuntimeErrorException(null);
+
+		}
 
 		tree.insert(key, value);
 		size++;
@@ -264,8 +278,8 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public boolean remove(T key) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return tree.delete(key);
 	}
 
 	@Override

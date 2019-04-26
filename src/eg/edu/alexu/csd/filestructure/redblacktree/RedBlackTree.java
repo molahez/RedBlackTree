@@ -250,39 +250,82 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	@Override
 	public boolean delete(T key) {
-		return false;
-		/*
-		 * if (search(key) == null) { return false; } Node<T, V> z = reqn;
-		 * 
-		 * Node<T, V> x; Node<T, V> y = z;
-		 * 
-		 * boolean y_original = y.getColor();
-		 * 
-		 * if (z.getLeftChild() == null) { x = (Node<T, V>) z.getRightChild();
-		 * transplant(z, (Node<T, V>) z.getRightChild());
-		 * 
-		 * } else if (z.getRightChild() == null) { x = (Node<T, V>) z.getLeftChild();
-		 * transplant(z, (Node<T, V>) z.getLeftChild());
-		 * 
-		 * } else { y = (Node<T, V>) treemin((Node<T, V>) z.getRightChild()); y_original
-		 * = y.getColor(); x = (Node<T, V>) y.getRightChild(); if (x != null &&
-		 * y.getParent() == z) {
-		 * 
-		 * x.setParent(z);
-		 * 
-		 * } else { transplant(y, (Node<T, V>) y.getRightChild());
-		 * y.setRightChild(z.getRightChild()); if (y.getRightChild() != null) {
-		 * y.getRightChild().setParent(y); }
-		 * 
-		 * } transplant(z, y); y.setLeftChild(z.getLeftChild()); if (y.getLeftChild() !=
-		 * null) { y.getLeftChild().setParent(y); }
-		 * 
-		 * y.setColor(z.getColor()); } if (y_original == Node.BLACK) { deleteFixup(x);
-		 * 
-		 * }
-		 * 
-		 * return true;
-		 */
+
+		if (search(key) == null) {
+			return false;
+		}
+		Node<T, V> z = reqn;
+
+		Node<T, V> x;
+		Node<T, V> y = z;
+
+		boolean y_original = y.getColor();
+		if(key == root.getKey()) {
+			clear();
+			return true;
+		}
+		if (z != nil && z.getLeftChild() == nil && z.getRightChild() == nil) {
+			if (z.getParent() != null && z == z.getParent().getLeftChild()) {
+				x = (Node<T, V>) z.getParent();
+				z.getParent().setLeftChild(nil);
+
+			} else if (z.getParent() != null && z == z.getParent().getRightChild()){
+				x = (Node<T, V>) z.getParent();
+				z.getParent().setRightChild(nil);
+			}
+		}
+
+		else if (z.getLeftChild() == nil) {
+
+			x = (Node<T, V>) z.getRightChild();
+			transplant(z, (Node<T, V>) z.getRightChild());
+			if (y_original == Node.BLACK) {
+				deleteFixup(x);
+
+			}
+
+		} else if (z.getRightChild() == nil) {
+
+			x = (Node<T, V>) z.getLeftChild();
+
+			transplant(z, (Node<T, V>) z.getLeftChild());
+			if (y_original == Node.BLACK) {
+				deleteFixup(x);
+
+			}
+
+		} else {
+			y = (Node<T, V>) treemin((Node<T, V>) z.getRightChild());
+			y_original = y.getColor();
+			x = (Node<T, V>) y.getRightChild();
+
+			if (x != nil && y.getParent() == z) {
+
+				x.setParent(z);
+
+			} else {
+				transplant(y, (Node<T, V>) y.getRightChild());
+				y.setRightChild(z.getRightChild());
+				if (y.getRightChild() != null) {
+					y.getRightChild().setParent(y);
+				}
+
+			}
+			transplant(z, y);
+			y.setLeftChild(z.getLeftChild());
+			if (y.getLeftChild() != nil) {
+				y.getLeftChild().setParent(y);
+			}
+
+			y.setColor(z.getColor());
+			if (y_original == Node.BLACK) {
+				deleteFixup(x);
+
+			}
+		}
+
+		return true;
+
 	}
 
 	private void transplant(Node<T, V> target, Node<T, V> targwith) {
@@ -294,7 +337,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 		} else {
 			target.getParent().setRightChild(targwith);
 		}
-		if (targwith == null) {
+		if (targwith == nil) {
 
 		} else {
 			targwith.setParent(target.getParent());
@@ -319,8 +362,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	}
 
 	private void deleteFixup(Node<T, V> x) {
-		while (x != null && x != root && x.getColor() == Node.BLACK) {
-			if (x == x.getParent().getLeftChild()) {
+		while (x != root && x.getColor() == Node.BLACK) {
+			if (x != nil && x == x.getParent().getLeftChild()) {
 				Node<T, V> w = (Node<T, V>) x.getParent().getRightChild();
 
 				if (w.getColor() == Node.RED) {
@@ -382,7 +425,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			}
 
 		}
-		if (x != null) {
+		if (x != nil) {
 			x.setColor(Node.BLACK);
 		}
 
