@@ -23,8 +23,7 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 		Node<T, V> x = tree.reqn;
 
 		if (x.getKey() != null) {
-			Node<T, V> y = (Node<T, V>) tree.successor(x);
-			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(y.getKey(), y.getValue());
+			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
 
 			return entry;
 		} else {
@@ -38,8 +37,7 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 		Node<T, V> x = tree.reqn;
 
 		if (x.getKey() != null) {
-			Node<T, V> y = (Node<T, V>) tree.successor(x);
-			return y.getKey();
+			return x.getKey();
 		} else {
 			return null;
 		}
@@ -116,7 +114,6 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 		tree.search(key);
 		Node<T, V> x = tree.reqn;
 		if (x.getKey() != null) {
-			Node<T, V> y = (Node<T, V>) tree.predecessor(x);
 			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
 
 			return entry;
@@ -131,8 +128,7 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 		tree.search(key);
 		Node<T, V> x = tree.reqn;
 		if (x.getKey() != null) {
-			Node<T, V> y = (Node<T, V>) tree.predecessor(x);
-			return y.getKey();
+			return x.getKey();
 		} else {
 
 			return null;
@@ -147,6 +143,10 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public ArrayList<Map.Entry<T, V>> headMap(T toKey) {
+		if(toKey == null) {
+			throw new RuntimeErrorException(null);
+
+		}
 		List<Map.Entry<T, V>> set = tree.inorder((Node<T, V>) tree.getRoot());
 		List<Map.Entry<T, V>> sett = new ArrayList<Map.Entry<T, V>>();
 
@@ -162,8 +162,13 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive) {
+		if(toKey == null) {
+			throw new RuntimeErrorException(null);
+
+		}
 		List<Map.Entry<T, V>> set = tree.inorder((Node<T, V>) tree.getRoot());
 		List<Map.Entry<T, V>> sett = new ArrayList<Map.Entry<T, V>>();
+		
 		if (inclusive) {
 			for (int i = 0; i < set.size(); i++) {
 				if (set.get(i).getKey().compareTo(toKey) <= 0) {

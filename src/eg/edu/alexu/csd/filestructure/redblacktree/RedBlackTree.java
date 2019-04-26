@@ -10,6 +10,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	private Node<T, V> root = null;
 	public Node<T, V> reqn = null;
+	private Node<T, V> nil = new Node<T, V>();
+	private boolean flag = false;
+
 	private Map.Entry<T, V> entry;
 	private List<Map.Entry<T, V>> set = new ArrayList<>();
 
@@ -43,9 +46,10 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 		if (root == null) {
 			return null;
 		}
-		while (true) {
+		while (true && temp != nil) {
+
 			if (key.compareTo(temp.getKey()) < 0) {
-				if (!temp.getLeftChild().isNull()) {
+				if (temp.getLeftChild() != nil) {
 					temp = (Node<T, V>) temp.getLeftChild();
 				} else {
 					return null;
@@ -53,7 +57,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			}
 
 			else if (key.compareTo(temp.getKey()) > 0) {
-				if (temp.getRightChild() != null) {
+				if (temp.getRightChild() != nil) {
 					temp = (Node<T, V>) temp.getRightChild();
 				} else {
 					return null;
@@ -65,6 +69,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			}
 
 		}
+		return null;
 	}
 
 	@Override
@@ -77,8 +82,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			return false;
 		}
 		while (true) {
+
 			if (key.compareTo(temp.getKey()) < 0) {
-				if (!temp.getLeftChild().isNull()) {
+				if (temp.getLeftChild() != nil) {
 					temp = (Node<T, V>) temp.getLeftChild();
 				} else {
 					return false;
@@ -86,7 +92,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			}
 
 			else if (key.compareTo(temp.getKey()) > 0) {
-				if (temp.getRightChild() != null) {
+				if (temp.getRightChild() != nil) {
 					temp = (Node<T, V>) temp.getRightChild();
 				} else {
 					return false;
@@ -111,28 +117,38 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 		Node<T, V> inserted = new Node<T, V>();
 		inserted.setKey(key);
 		inserted.setValue(value);
+		nil.setColor(Node.BLACK);
+		nil.setKey(null);
+
+		nil.setValue(null);
 
 		if (root == null) {
 
 			root = inserted;
 			inserted.setColor(Node.BLACK);
 			inserted.setParent(null);
+			inserted.setRightChild(nil);
+			inserted.setLeftChild(nil);
 
 		} else {
 			inserted.setColor(Node.RED);
-			while (true) {
+			while (true && temp != nil) {
 				if (key.compareTo((T) temp.getKey()) < 0) {
-					if (temp.getLeftChild() == null) {
+					if (temp.getLeftChild() == nil) {
 						temp.setLeftChild(inserted);
 						inserted.setParent(temp);
+						inserted.setRightChild(nil);
+						inserted.setLeftChild(nil);
 						break;
 					} else {
 						temp = (Node<T, V>) temp.getLeftChild();
 					}
 				} else if (key.compareTo((T) temp.getKey()) > 0) {
-					if (temp.getRightChild() == null) {
+					if (temp.getRightChild() == nil) {
 						temp.setRightChild(inserted);
 						inserted.setParent(temp);
+						inserted.setRightChild(nil);
+						inserted.setLeftChild(nil);
 						break;
 					} else {
 						temp = (Node<T, V>) temp.getRightChild();
@@ -156,7 +172,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			if (node.getParent() == node.getParent().getParent().getLeftChild()) {
 				uncle = (Node<T, V>) node.getParent().getParent().getRightChild();
 
-				if (uncle != null && uncle.getColor() == Node.RED) {
+				if (uncle != nil && uncle.getColor() == Node.RED) {
 					node.getParent().setColor(Node.BLACK);
 					uncle.setColor(Node.BLACK);
 					node.getParent().getParent().setColor(Node.RED);
@@ -173,7 +189,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 			} else {
 				uncle = (Node<T, V>) node.getParent().getParent().getLeftChild();
-				if (uncle != null && uncle.getColor() == Node.RED) {
+				if (uncle != nil && uncle.getColor() == Node.RED) {
 					node.getParent().setColor(Node.BLACK);
 					uncle.setColor(Node.BLACK);
 					node.getParent().getParent().setColor(Node.RED);
@@ -197,7 +213,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	private void rotateLeft(Node<T, V> node) {
 		Node<T, V> y = (Node<T, V>) node.getRightChild();
 		node.setRightChild(y.getLeftChild());
-		if (y.getLeftChild() != null) {
+		if (y.getLeftChild() != nil) {
 			y.getLeftChild().setParent(node);
 		}
 		y.setParent(node.getParent());
@@ -216,7 +232,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	private void rotateRight(Node<T, V> node) {
 		Node<T, V> x = (Node<T, V>) node.getLeftChild();
 		node.setLeftChild(x.getRightChild());
-		if (x.getRightChild() != null) {
+		if (x.getRightChild() != nil) {
 			x.getRightChild().setParent(node);
 		}
 		x.setParent(node.getParent());
@@ -287,7 +303,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	}
 
 	public INode<T, V> treemin(Node<T, V> subtree) {
-		while (subtree.getLeftChild() != null) {
+		while (subtree.getLeftChild() != nil) {
 			subtree = (Node<T, V>) subtree.getLeftChild();
 		}
 		return subtree;
@@ -295,7 +311,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	}
 
 	public INode<T, V> treemax(Node<T, V> subtree) {
-		while (subtree.getRightChild() != null) {
+		while (subtree.getRightChild() != nil) {
 			subtree = (Node<T, V>) subtree.getRightChild();
 		}
 		return subtree;
@@ -373,7 +389,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	}
 
 	public INode<T, V> successor(Node<T, V> x) {
-		if (x.getRightChild() != null) {
+		if (x.getRightChild() != nil) {
 			return treemin((Node<T, V>) x.getRightChild());
 		}
 		Node<T, V> P = (Node<T, V>) x.getParent();
@@ -387,7 +403,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	public INode<T, V> predecessor(Node<T, V> x) {
 
-		if (x.getLeftChild() != null) {
+		if (x.getLeftChild() != nil) {
 			return treemax((Node<T, V>) x.getLeftChild());
 		}
 		Node<T, V> P = (Node<T, V>) x.getParent();
@@ -401,7 +417,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 	public List<Map.Entry<T, V>> inorder(Node<T, V> x) {
 
-		if (x != null) {
+		if (x != nil) {
 			inorder((Node<T, V>) x.getLeftChild());
 
 			entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
@@ -414,17 +430,23 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	}
 
 	public Boolean postorder(Node<T, V> x, V val) {
-		if (x != null) {
+		if (x != nil) {
 
 			postorder((Node<T, V>) x.getLeftChild(), val);
 			postorder((Node<T, V>) x.getRightChild(), val);
 
 			if (x.getValue().toString().equals(val.toString())) {
-				return true;
+
+				flag = true;
+
 			}
 
 		}
-		return false;
+		if (flag) {
+			return true;
+		} else {
+			return false;
+		}
 
 	}
 }
