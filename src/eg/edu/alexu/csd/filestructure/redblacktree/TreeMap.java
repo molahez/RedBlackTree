@@ -243,14 +243,35 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public Map.Entry<T, V> pollFirstEntry() {
-		// TODO Auto-generated method stub
-		return null;
+		if (tree.isEmpty()) {
+			return null;
+		}
+		Node<T, V> x = (Node<T, V>) tree.treemin((Node<T, V>) tree.getRoot());
+
+		if (x.getKey() != null) {
+			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
+			remove(x.getKey());
+			return entry;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public Map.Entry<T, V> pollLastEntry() {
-		// TODO Auto-generated method stub
-		return null;
+		if (tree.isEmpty()) {
+			return null;
+		}
+		Node<T, V> x = (Node<T, V>) tree.treemax((Node<T, V>) tree.getRoot());
+
+		if (x.getKey() != null) {
+
+			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
+			remove(x.getKey());
+			return entry;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -278,13 +299,14 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public boolean remove(T key) {
-		
+		size--;
 		return tree.delete(key);
+
 	}
 
 	@Override
 	public int size() {
-		return size;
+		return tree.size;
 	}
 
 	@Override

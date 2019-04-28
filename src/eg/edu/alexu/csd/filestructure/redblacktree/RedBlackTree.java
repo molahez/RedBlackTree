@@ -33,6 +33,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 	@Override
 	public void clear() {
 		root = null;
+		size = 0;
 
 	}
 
@@ -122,7 +123,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 		nil.setKey(null);
 		nil.setValue(null);
 
-		if (root == null) {
+		if (root == null || size == 0) {
 
 			root = inserted;
 			inserted.setColor(Node.BLACK);
