@@ -420,7 +420,9 @@ public class UnitTest {
 			for (Integer elem : list) {
 				Assert.assertTrue((boolean) redBlackTree.delete(elem));
 			}
+
 			INode node = redBlackTree.getRoot();
+
 			if (node != null && !node.isNull()) {
 				Assert.fail();
 			}
