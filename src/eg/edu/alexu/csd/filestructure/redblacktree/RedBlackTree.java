@@ -153,6 +153,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 						inserted.setParent(temp);
 						inserted.setRightChild(nil);
 						inserted.setLeftChild(nil);
+						nil.setParent(inserted);
 						break;
 					} else {
 						temp = (Node<T, V>) temp.getRightChild();
@@ -279,13 +280,24 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 		if (z != nil && z.getLeftChild() == nil && z.getRightChild() == nil) {
 			if (z.getParent() != null && z == z.getParent().getLeftChild()) {
-				x = (Node<T, V>) z.getParent();
+				x = nil;
+				x.setParent(z.getParent());
 				z.getParent().setLeftChild(nil);
+				if (y_original == Node.BLACK) {
+					deleteFixup(x);
+
+				}
 
 			} else if (z.getParent() != null && z == z.getParent().getRightChild()) {
-				x = (Node<T, V>) z.getParent();
+				x = nil;
+				x.setParent(z.getParent());
 				z.getParent().setRightChild(nil);
+				if (y_original == Node.BLACK) {
+					deleteFixup(x);
+
+				}
 			}
+
 		}
 
 		else if (z.getLeftChild() == nil) {
@@ -326,9 +338,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 			}
 			transplant(z, y);
 			y.setLeftChild(z.getLeftChild());
-			if (y.getLeftChild() != nil) {
-				y.getLeftChild().setParent(y);
-			}
+
+			y.getLeftChild().setParent(y);
 
 			y.setColor(z.getColor());
 			if (y_original == Node.BLACK) {
@@ -350,11 +361,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 		} else {
 			target.getParent().setRightChild(targwith);
 		}
-		if (targwith == nil) {
 
-		} else {
-			targwith.setParent(target.getParent());
-		}
+		targwith.setParent(target.getParent());
 
 	}
 
@@ -385,7 +393,6 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 						rotateLeft((Node<T, V>) x.getParent());
 						w = (Node<T, V>) x.getParent().getRightChild();
 					}
-
 					if (w.getLeftChild().getColor() == Node.BLACK && w.getRightChild().getColor() == Node.BLACK) {
 						w.setColor(Node.RED);
 						x = (Node<T, V>) x.getParent();
@@ -416,6 +423,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 						rotateRight((Node<T, V>) x.getParent());
 						w = (Node<T, V>) x.getParent().getLeftChild();
 					}
+
 					if (w.getLeftChild().getColor() == Node.BLACK && w.getRightChild().getColor() == Node.BLACK) {
 						w.setColor(Node.RED);
 						x = (Node<T, V>) x.getParent();

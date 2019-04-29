@@ -6,7 +6,6 @@ public class Node<T extends Comparable<T>, V> implements INode<T, V> {
 	private Node<T, V> left, right;
 	private Node<T, V> parent;
 	private Boolean color;
-	private Boolean flag;
 
 	@Override
 	public void setParent(INode<T, V> parent) {

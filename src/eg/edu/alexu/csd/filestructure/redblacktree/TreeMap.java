@@ -3,6 +3,7 @@ package eg.edu.alexu.csd.filestructure.redblacktree;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,28 +20,67 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 
 	@Override
 	public Map.Entry<T, V> ceilingEntry(T key) {
-		tree.search(key);
-		Node<T, V> x = tree.reqn;
+		if (key == null) {
+			throw new RuntimeErrorException(null);
 
-		if (x.getKey() != null) {
-			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
-
-			return entry;
-		} else {
-			return null;
 		}
+
+		if (key.compareTo(firstKey()) < 0 || key.compareTo(lastKey()) > 0) {
+			return null;
+		} else {
+			tree.search(key);
+			Node<T, V> x = tree.reqn;
+			if (x != null && x.getKey() != null) {
+
+				Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
+				return entry;
+			} else {
+				Set<T> list = new LinkedHashSet<T>(keySet());
+				for (T i : list) {
+					if (key.compareTo(i) < 0) {
+						tree.search(i);
+						Node<T, V> z = tree.reqn;
+						Map.Entry<T, V> entry1 = new AbstractMap.SimpleEntry<T, V>(z.getKey(), z.getValue());
+						return entry1;
+
+					}
+				}
+
+			}
+		}
+		return null;
+
 	}
 
 	@Override
 	public T ceilingKey(T key) {
-		tree.search(key);
-		Node<T, V> x = tree.reqn;
+		if (key == null) {
+			throw new RuntimeErrorException(null);
 
-		if (x.getKey() != null) {
-			return x.getKey();
-		} else {
-			return null;
 		}
+
+		if (key.compareTo(firstKey()) < 0 || key.compareTo(lastKey()) > 0) {
+			return null;
+		} else {
+			tree.search(key);
+			Node<T, V> x = tree.reqn;
+			if (x != null && x.getKey() != null) {
+
+				return x.getKey();
+			} else {
+				Set<T> list = new LinkedHashSet<T>(keySet());
+				for (T i : list) {
+					if (key.compareTo(i) < 0) {
+						tree.search(i);
+						Node<T, V> z = tree.reqn;
+						return z.getKey();
+
+					}
+				}
+
+			}
+		}
+		return null;
 
 	}
 
@@ -117,29 +157,70 @@ public class TreeMap<T extends Comparable<T>, V> implements ITreeMap<T, V> {
 	public Map.Entry<T, V> floorEntry(T key) {
 		if (key == null) {
 			throw new RuntimeErrorException(null);
+
 		}
-		tree.search(key);
-		Node<T, V> x = tree.reqn;
-		if (x.getKey() != null) {
-			Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
 
-			return entry;
-		} else {
-
+		if (key.compareTo(firstKey()) < 0 || key.compareTo(lastKey()) > 0) {
 			return null;
+		} else {
+			tree.search(key);
+			Node<T, V> x = tree.reqn;
+			if (x != null && x.getKey() != null) {
+
+				Map.Entry<T, V> entry = new AbstractMap.SimpleEntry<T, V>(x.getKey(), x.getValue());
+				return entry;
+			} else {
+				Set<T> list = new LinkedHashSet<T>(keySet());
+				ArrayList<T> list1 = new ArrayList<T>(list);
+				Collections.reverse(list1);
+
+				for (T i : list1) {
+					if (key.compareTo(i) > 0) {
+						tree.search(i);
+						Node<T, V> z = tree.reqn;
+						Map.Entry<T, V> entry1 = new AbstractMap.SimpleEntry<T, V>(z.getKey(), z.getValue());
+						return entry1;
+
+					}
+				}
+
+			}
 		}
+		return null;
 	}
 
 	@Override
 	public T floorKey(T key) {
-		tree.search(key);
-		Node<T, V> x = tree.reqn;
-		if (x.getKey() != null) {
-			return x.getKey();
-		} else {
+		if (key == null) {
+			throw new RuntimeErrorException(null);
 
-			return null;
 		}
+
+		if (key.compareTo(firstKey()) < 0 || key.compareTo(lastKey()) > 0) {
+			return null;
+		} else {
+			tree.search(key);
+			Node<T, V> x = tree.reqn;
+			if (x != null && x.getKey() != null) {
+
+				return x.getKey();
+			} else {
+				Set<T> list = new LinkedHashSet<T>(keySet());
+				ArrayList<T> list1 = new ArrayList<T>(list);
+				Collections.reverse(list1);
+
+				for (T i : list1) {
+					if (key.compareTo(i) > 0) {
+						tree.search(i);
+						Node<T, V> z = tree.reqn;
+						return z.getKey();
+
+					}
+				}
+
+			}
+		}
+		return null;
 	}
 
 	@Override
